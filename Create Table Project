@@ -1,0 +1,61 @@
+USE BGT_Billboards;
+
+-- drop tables
+-- DROP TABLE Sensor_Reading;
+-- DROP TABLE Billboard;
+-- DROP TABLE Organization;
+-- DROP TABLE Content;
+-- DROP TABLE Booking;
+
+CREATE TABLE Booking (
+    booking_id INT PRIMARY KEY ,
+    quote_price DECIMAL (6,2),
+    start_datetime DATETIME2,
+    end_datetime DATETIME2,
+    CHECK (
+        DATEPART(MINUTE, start_datetime) = 0 AND 
+        DATEPART(SECOND, start_datetime) = 0 AND 
+        DATEPART(NANOSECOND, start_datetime) = 0
+    ),
+    CHECK (
+        DATEPART(MINUTE, end_datetime) = 0 AND 
+        DATEPART(SECOND, end_datetime) = 0 AND 
+        DATEPART(NANOSECOND, end_datetime) = 0
+    )
+)
+
+CREATE TABLE Content (
+    content_id INT PRIMARY KEY,
+    type NVARCHAR(50),
+    description NVARCHAR(500),
+    booking_id INT FOREIGN KEY REFERENCES Booking
+)
+
+CREATE TABLE Organization (
+    org_id INT PRIMARY KEY,
+    type NVARCHAR(50),
+    org_name NVARCHAR(500),
+    booking_id INT FOREIGN KEY REFERENCES Booking,
+    content_id INT FOREIGN KEY REFERENCES Content
+)
+
+CREATE TABLE Billboard (
+    billboard_id INT PRIMARY KEY,
+    latitude DECIMAL(8,6),
+    longitude DECIMAL (9,6),
+    neighborhood NVARCHAR(100),
+    sensor_id INT NOT NULL UNIQUE,
+    sensor_type NVARCHAR(50),
+    booking_id INT FOREIGN KEY REFERENCES Booking
+)
+
+CREATE TABLE Sensor_Reading (
+    timestamp DATETIME2,
+    ped_south INT,
+    ped_north INT,
+    bike_south INT,
+    bike_north INT,
+    sensor_id INT FOREIGN KEY REFERENCES Billboard(sensor_id),
+    PRIMARY KEY (timestamp, sensor_id)
+)
+
