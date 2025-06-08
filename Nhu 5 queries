@@ -1,0 +1,20 @@
+use BGT_Billboards;
+
+-- Which organization has booked the highest number of distinct advertising slots
+-- across all billboards in the last month? 
+    -- changed this from the last quarter to the last month
+
+-- What are the top 3 billboards ranked by their total recorded bicycle traffic for the
+-- month of April 2025? 
+
+-- What is the average price for a 1-hour booking slot on Billboard 'BGT-NE70th-1'
+-- during morning peak hours versus evening peak hours on weekdays?
+    -- need to clarify time ranges
+
+-- List all organizations classified as non-profit that have active or upcoming bookings.
+
+-- On average, which direction sees more bicycle traffic daily across all sensors
+-- located on the Burke-Gilman trail?
+    -- might choose a diff billboard location bc we added that distinction
+
+
