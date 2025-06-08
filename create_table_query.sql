@@ -1,10 +1,10 @@
 USE BGT_Billboards;
 
-DROP TABLE IF EXISTS Sensor_Reading;
-DROP TABLE IF EXISTS Booking;
-DROP TABLE IF EXISTS Billboard;
-DROP TABLE IF EXISTS Content;
-DROP TABLE IF EXISTS Organization;
+-- DROP TABLE IF EXISTS Sensor_Reading;
+-- DROP TABLE IF EXISTS Booking;
+-- DROP TABLE IF EXISTS Billboard;
+-- DROP TABLE IF EXISTS Content;
+-- DROP TABLE IF EXISTS Organization;
 
 
 CREATE TABLE Organization (
@@ -74,7 +74,6 @@ INSERT INTO Organization (org_id, type, org_name) VALUES
 (109, 'Non-Profit', 'MoPOP (Museum of Pop Culture)'),
 (110, 'Commercial', 'Theo Chocolate');
 
--- Step 2: Insert into 'Content' (Depends on Organization)
 INSERT INTO Content (content_id, type, description, org_id) VALUES
 (201, 'Advertisement', 'Ad for a new line of dark roast coffee beans.', 101),
 (202, 'Public Service Announcement', 'PSA about a beach cleanup event next month.', 102),
@@ -88,8 +87,6 @@ INSERT INTO Content (content_id, type, description, org_id) VALUES
 (210, 'Exhibition', 'New Marvel exhibit now open at MoPOP.', 109),
 (211, 'Advertisement', 'Taste our new organic dark chocolate bar.', 110);
 
--- Step 3: Insert into 'Billboard' (Parent table, no dependencies)
--- Note: Each billboard has a unique sensor_id.
 INSERT INTO Billboard (billboard_id, latitude, longitude, neighborhood, sensor_id, sensor_type) VALUES
 (1, 47.6229, -122.3223, 'Capitol Hill', 501, 'Pedestrian/Bike Counter'),
 (2, 47.6538, -122.3500, 'Fremont', 502, 'Pedestrian/Bike Counter'),
@@ -102,8 +99,6 @@ INSERT INTO Billboard (billboard_id, latitude, longitude, neighborhood, sensor_i
 (9, 47.5457, -122.3845, 'West Seattle', 509, 'Pedestrian Counter'),
 (10, 47.6145, -122.3145, 'First Hill', 510, 'Pedestrian/Bike Counter');
 
--- Step 4: Insert into 'Sensor_Reading' (Depends on Billboard)
--- Timestamp format is 'YYYY-MM-DD HH:MI:SS'
 INSERT INTO Sensor_Reading (timestamp, ped_south, ped_north, bike_south, bike_north, sensor_id) VALUES
 ('2025-06-08 14:00:00', 150, 165, 30, 25, 501), -- Capitol Hill
 ('2025-06-08 14:00:00', 210, 190, 45, 55, 502), -- Fremont
@@ -116,8 +111,6 @@ INSERT INTO Sensor_Reading (timestamp, ped_south, ped_north, bike_south, bike_no
 ('2025-06-09 10:00:00', 180, 200, 70, 75, 508), -- Ballard
 ('2025-06-09 10:00:00', 110, 100, 0, 0, 509);   -- West Seattle (Ped only)
 
--- Step 5: Insert into 'Booking' (Depends on Content and Billboard)
--- Note: start_datetime and end_datetime must be on the hour.
 INSERT INTO Booking (booking_id, quote_price, start_datetime, end_datetime, content_id, billboard_id) VALUES
 (1001, 750.00, '2025-06-10 09:00:00', '2025-06-17 09:00:00', 201, 1), -- Coffee ad on Capitol Hill
 (1002, 500.50, '2025-06-12 12:00:00', '2025-06-19 12:00:00', 202, 2), -- PSA in Fremont
@@ -130,9 +123,8 @@ INSERT INTO Booking (booking_id, quote_price, start_datetime, end_datetime, cont
 (1009, 850.00, '2025-08-01 10:00:00', '2025-08-08 10:00:00', 210, 4), -- MoPOP ad at Seattle Center
 (1010, 725.00, '2025-08-05 18:00:00', '2025-08-12 18:00:00', 211, 10); -- Theo Chocolate ad on First Hill
 
--- Verification Step: You can now run SELECT statements to see your data.
-SELECT * FROM Organization;
-SELECT * FROM Content;
-SELECT * FROM Billboard;
-SELECT * FROM Sensor_Reading;
-SELECT * FROM Booking;
+-- SELECT * FROM Organization;
+-- SELECT * FROM Content;
+-- SELECT * FROM Billboard;
+-- SELECT * FROM Sensor_Reading;
+-- SELECT * FROM Booking;
