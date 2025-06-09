@@ -55,7 +55,7 @@ WITH DowntownBookings as (
             ELSE 'Off Peak'
         END AS time_period
     FROM Booking b
-    JOIN Billboard bill ON b.booking_id = bill.booking_id
+    JOIN Billboard bill ON b.billboard_id = bill.billboard_id
     WHERE bill.neighborhood = 'Downtown'
 )
 SELECT time_period, AVG(quote_price) as avg_price
