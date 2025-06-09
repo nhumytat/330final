@@ -25,7 +25,6 @@ CREATE TABLE Billboard (
     longitude DECIMAL (9,6),
     neighborhood NVARCHAR(100),
     sensor_id INT NOT NULL UNIQUE
-    -- sensor_type NVARCHAR(50)
 );
 
 CREATE TABLE Booking (

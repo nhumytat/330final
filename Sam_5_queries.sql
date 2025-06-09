@@ -1,3 +1,4 @@
+use BGT_Billboards;
 -- Q1: What was the total count of northbound cyclists and southbound pedestrians between 6am and 6pm on a specific day (June 9th)?
 
 SELECT SUM(bike_north) AS TotalNorthboundCyclists, SUM(ped_south) AS TotalSouthboundPedestrians
