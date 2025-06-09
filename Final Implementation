@@ -97,7 +97,7 @@ SELECT *
 FROM RankedBikeTraffic
 WHERE rank <= 3;
 
--- Q3) What is the average price for a 1-hour booking slot for billboards in Downtown
+-- Q3) DEMO: What is the average price for a 1-hour booking slot for billboards in Downtown
 -- during morning peak hours (7 am - 9 am) versus evening peak hours (4pm - 6pm)?
 WITH DowntownBookings as (
     SELECT 
@@ -117,7 +117,7 @@ SELECT time_period, AVG(quote_price) as avg_price
 FROM DowntownBookings
 GROUP BY time_period;
 
--- Q4) List all organizations classified as non-profit that have active or upcoming bookings.
+-- Q4) DEMO: List all organizations classified as non-profit that have active or upcoming bookings.
 SELECT DISTINCT o.org_name
 FROM Organization o 
 JOIN Content c ON o.org_id = c.org_id
@@ -133,7 +133,7 @@ WHERE o.type = 'non-profit' AND
 ORDER BY org_name ASC;
 
 
--- Q5) On average, which direction sees more pedestrian traffic daily across 
+-- Q5) DEMO: On average, which direction sees more pedestrian traffic daily across 
 -- all sensors in Univeristy District?
 WITH PedCount AS (
     SELECT 
