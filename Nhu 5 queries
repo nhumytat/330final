@@ -2,6 +2,9 @@ use BGT_Billboards;
 
 -- Which organization has booked the highest number of distinct advertising slots
 -- across all billboards in May 2025? 
+-- witness query
+-- step 1: get all the counts
+-- find all organizations that have that count
 SELECT TOP 1 o.org_name, COUNT(DISTINCT b.booking_id) as slots
 FROM Organization o
     JOIN Content c ON o.org_id = c.org_id
@@ -11,6 +14,8 @@ GROUP BY o.org_name
 ORDER BY slots DESC;
 
 -- What are the top 3 billboards ranked by their total recorded bicycle traffic for 2025?
+-- window function rank()
+-- filter for rank <= 3
 SELECT TOP 3
     b.billboard_id, 
     b.neighborhood, 
