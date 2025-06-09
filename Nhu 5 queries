@@ -1,30 +1,46 @@
 use BGT_Billboards;
 
 -- Which organization has booked the highest number of distinct advertising slots
--- across all billboards in May 2025? 
--- witness query
--- step 1: get all the counts
--- find all organizations that have that count
-SELECT TOP 1 o.org_name, COUNT(DISTINCT b.booking_id) as slots
-FROM Organization o
-    JOIN Content c ON o.org_id = c.org_id
-    JOIN Booking b ON c.content_id = b.content_id
-WHERE MONTH(b.start_datetime) = 5 AND YEAR(b.start_datetime) = 2025
-GROUP BY o.org_name
-ORDER BY slots DESC;
+-- across all billboards in June 2025? 
+WITH OrgBookings as (
+    SELECT 
+        o.org_name,
+        COUNT(o.org_name) AS slots
+    FROM Organization o
+        JOIN Content c ON o.org_id = c.org_id
+        JOIN Booking b ON c.content_id = b.content_id
+    WHERE MONTH(b.start_datetime) = 6 AND YEAR(b.start_datetime) = 2025
+    GROUP BY o.org_name
+),
+Ranked AS (
+    SELECT 
+        org_name,
+        slots,
+        RANK() OVER (ORDER BY slots DESC) AS rank
+    FROM OrgBookings
+)
+SELECT * 
+FROM Ranked
+WHERE rank = 1;
 
 -- What are the top 3 billboards ranked by their total recorded bicycle traffic for 2025?
--- window function rank()
--- filter for rank <= 3
-SELECT TOP 3
-    b.billboard_id, 
-    b.neighborhood, 
-    SUM(sr.bike_north + sr.bike_south) as total_bike_traffic
-FROM Sensor_Reading sr
-JOIN Billboard b on sr.sensor_id = b.sensor_id
-WHERE YEAR(sr.timestamp) = 2025
-GROUP BY b.billboard_id, b.neighborhood
-ORDER BY total_bike_traffic DESC
+WITH BikeTraffic AS (
+    SELECT
+        b.billboard_id,
+        b.neighborhood,
+        SUM(sr.bike_north + sr.bike_south) AS total
+    FROM Sensor_Reading sr
+    JOIN Billboard b on sr.sensor_id = b.sensor_id  
+    WHERE YEAR(sr.timestamp) = 2025
+    GROUP BY b.billboard_id, b.neighborhood
+),
+RankedBikeTraffic AS (
+    SELECT *, RANK() OVER (ORDER BY total DESC) AS rank
+    FROM BikeTraffic
+)
+SELECT * 
+FROM RankedBikeTraffic
+WHERE rank <= 3;
 
 -- What is the average price for a 1-hour booking slot for billboards in Downtown
 -- during morning peak hours (7 am - 9 am) versus evening peak hours (4pm - 6pm)?
@@ -74,10 +90,19 @@ WITH PedCount AS (
     WHERE b.neighborhood = 'University District'
     GROUP BY CAST(sr.timestamp AS DATE)
 )
+-- columns that show both average values
 SELECT
     AVG(south) as avg_daily_south,
     AVG(north) as avg_daily_north
 FROM PedCount;
+-- shows answer as text
+-- SELECT 
+--     CASE 
+--         WHEN AVG(south) > AVG(north) THEN 'South has more pedestrian traffic'
+--         WHEN AVG(south) < AVG(north) THEN 'North has more pedestrian traffic'
+--         ELSE 'Tie'
+--     END AS Answer
+-- FROM PedCount;
 
 
 
